@@ -73,9 +73,9 @@ function App() {
             />
             <Route path="login" element={<LoginPage />} />
 
-            {/* <Route path="/" element={<RequireAuth />}> */}
+            <Route path="/" element={<RequireAuth />}>
               <Route path="/users" element={<UsersPage />} />
-            {/* </Route> */}
+            </Route>
           </Routes>
         </section>
         {error && <p className="">{error}</p>}
