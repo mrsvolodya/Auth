@@ -37,8 +37,8 @@ function App() {
 
   return (
     <>
-      <nav className="bg-gray-900 border-b-red-600 border-b-1 flex justify-between h-14">
-        <div className="flex gap-4 items-center mx-3">
+      <nav className="bg-gray-900 border-b-red-600 border-b-1 flex justify-between h-14 text-[12px] sm:text-[15px]">
+        <div className="flex mx-1 sm:gap-4 items-center sm:mx-3">
           <CustomLink to="/">Home</CustomLink>
           <CustomLink to="users">Users</CustomLink>
         </div>
