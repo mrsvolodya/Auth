@@ -68,7 +68,7 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="sign-up" element={<RegistrationPage />} />
             <Route
-              path="activate/:activationToken"
+              path="auth/activation/:activationToken"
               element={<AccountActivationPage />}
             />
             <Route path="login" element={<LoginPage />} />
@@ -78,7 +78,7 @@ function App() {
             </Route>
           </Routes>
         </section>
-        {error && <p className="">{error}</p>}
+        {error && <p>{error}</p>}
       </main>
     </>
   );
