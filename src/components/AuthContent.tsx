@@ -21,7 +21,6 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
 
   async function activate(activationToken: string) {
     const { accessToken, user } = await authService.activate(activationToken);
-
     accessTokenService.save(accessToken);
     setCurrentUser(user);
   }

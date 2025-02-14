@@ -24,7 +24,6 @@ export const LoginPage = () => {
   const [error, setError] = usePageError("");
   const { login, isChecked, currentUser } = useAuth();
 
-
   if (isChecked && currentUser) {
     return <Navigate to="/" />;
   }

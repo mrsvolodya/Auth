@@ -12,7 +12,7 @@ export const authService = {
   },
 
   activate: (token: string): Promise<AuthData> => {
-    return client.get(`/auth/activation/${token}`);
+    return client.get(`/activation/${token}`);
   },
 
   login: (email: string, password: string): Promise<AuthData> => {

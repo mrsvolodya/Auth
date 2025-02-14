@@ -68,14 +68,14 @@ function App() {
             <Route path="/" element={<HomePage />} />
             <Route path="sign-up" element={<RegistrationPage />} />
             <Route
-              path="auth/activation/:activationToken"
+              path="activation/:activationToken"
               element={<AccountActivationPage />}
             />
             <Route path="login" element={<LoginPage />} />
 
-            <Route path="/" element={<RequireAuth />}>
+            {/* <Route path="/" element={<RequireAuth />}> */}
               <Route path="/users" element={<UsersPage />} />
-            </Route>
+            {/* </Route> */}
           </Routes>
         </section>
         {error && <p>{error}</p>}
