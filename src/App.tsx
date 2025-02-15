@@ -1,39 +1,39 @@
-import { Route, Routes, useNavigate } from "react-router-dom";
-import { CustomLink } from "./components/CustomLink";
-import { HomePage } from "./pages/HomePage/HomePage";
-import { RegistrationPage } from "./pages/RegistrationPage/RegistrationPage";
-import { usePageError } from "./hooks/usePageError";
-import { useAuth } from "./components/AuthContent";
-import { useEffect } from "react";
-import { Loader } from "./components/Loader";
-import { AxiosError } from "axios";
-import { AccountActivationPage } from "./pages/AccountActivationPage/AccountActivationPage";
-import { LoginPage } from "./pages/LoginPage/LoginPage";
-import { RequireAuth } from "./components/RequireAuth";
-import { UsersPage } from "./pages/UsersPage/UsersPage";
+import { AxiosError } from 'axios'
+import { useEffect } from 'react'
+import { Route, Routes, useNavigate } from 'react-router-dom'
+import { useAuth } from './components/AuthContent'
+import { CustomLink } from './components/CustomLink'
+import { Loader } from './components/Loader'
+import { RequireAuth } from './components/RequireAuth'
+import { usePageError } from './hooks/usePageError'
+import { AccountActivationPage } from './pages/AccountActivationPage/AccountActivationPage'
+import { HomePage } from './pages/HomePage/HomePage'
+import { LoginPage } from './pages/LoginPage/LoginPage'
+import { RegistrationPage } from './pages/RegistrationPage/RegistrationPage'
+import { UsersPage } from './pages/UsersPage/UsersPage'
 
 function App() {
-  const navigate = useNavigate();
-  const [error, setError] = usePageError("");
-  const { isChecked, currentUser, logout, checkAuth } = useAuth();
+  const navigate = useNavigate()
+  const [error, setError] = usePageError('')
+  const { isChecked, currentUser, logout, checkAuth } = useAuth()
 
   useEffect(() => {
-    checkAuth();
-  }, []);
+    checkAuth()
+  }, [])
 
   if (!isChecked) {
-    return <Loader />;
+    return <Loader />
   }
 
   const handleLogout = () => {
     logout()
       .then(() => {
-        navigate("/");
+        navigate('/')
       })
       .catch((error: AxiosError<{ message?: string }>) => {
-        setError(error.response?.data?.message ?? "");
-      });
-  };
+        setError(error.response?.data?.message ?? '')
+      })
+  }
 
   return (
     <>
@@ -73,15 +73,15 @@ function App() {
             />
             <Route path="login" element={<LoginPage />} />
 
-            {/* <Route path="/" element={<RequireAuth />}> */}
+            <Route path="/" element={<RequireAuth />}>
               <Route path="/users" element={<UsersPage />} />
-            {/* </Route> */}
+            </Route>
           </Routes>
         </section>
         {error && <p>{error}</p>}
       </main>
     </>
-  );
+  )
 }
 
-export default App;
+export default App
