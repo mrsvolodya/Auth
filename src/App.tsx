@@ -1,39 +1,39 @@
-import { AxiosError } from 'axios'
-import { useEffect } from 'react'
-import { Route, Routes, useNavigate } from 'react-router-dom'
-import { useAuth } from './components/AuthContent'
-import { CustomLink } from './components/CustomLink'
-import { Loader } from './components/Loader'
-import { RequireAuth } from './components/RequireAuth'
-import { usePageError } from './hooks/usePageError'
-import { AccountActivationPage } from './pages/AccountActivationPage/AccountActivationPage'
-import { HomePage } from './pages/HomePage/HomePage'
-import { LoginPage } from './pages/LoginPage/LoginPage'
-import { RegistrationPage } from './pages/RegistrationPage/RegistrationPage'
-import { UsersPage } from './pages/UsersPage/UsersPage'
+import { AxiosError } from "axios";
+import { useEffect } from "react";
+import { Route, Routes, useNavigate } from "react-router-dom";
+import { useAuth } from "./components/AuthContent";
+import { CustomLink } from "./components/CustomLink";
+import { Loader } from "./components/Loader";
+import { RequireAuth } from "./components/RequireAuth";
+import { usePageError } from "./hooks/usePageError";
+import { AccountActivationPage } from "./pages/AccountActivationPage/AccountActivationPage";
+import { HomePage } from "./pages/HomePage/HomePage";
+import { LoginPage } from "./pages/LoginPage/LoginPage";
+import { RegistrationPage } from "./pages/RegistrationPage/RegistrationPage";
+import { UsersPage } from "./pages/UsersPage/UsersPage";
 
 function App() {
-  const navigate = useNavigate()
-  const [error, setError] = usePageError('')
-  const { isChecked, currentUser, logout, checkAuth } = useAuth()
+  const navigate = useNavigate();
+  const [error, setError] = usePageError("");
+  const { isChecked, currentUser, logout, checkAuth } = useAuth();
 
   useEffect(() => {
-    checkAuth()
-  }, [])
+    checkAuth();
+  }, []);
 
   if (!isChecked) {
-    return <Loader />
+    return <Loader />;
   }
 
   const handleLogout = () => {
     logout()
       .then(() => {
-        navigate('/')
+        navigate("/");
       })
       .catch((error: AxiosError<{ message?: string }>) => {
-        setError(error.response?.data?.message ?? '')
-      })
-  }
+        setError(error.response?.data?.message ?? "");
+      });
+  };
 
   return (
     <>
@@ -45,7 +45,7 @@ function App() {
         <div className="flex items-center gap-3 mx-3">
           {currentUser ? (
             <button
-              className="button is-light has-text-weight-bold"
+              className="border-1 border-red-600 outline-none rounded-md p-1 px-2 cursor-pointer bg-red-600"
               onClick={handleLogout}
             >
               Log out
@@ -81,7 +81,7 @@ function App() {
         {error && <p>{error}</p>}
       </main>
     </>
-  )
+  );
 }
 
-export default App
+export default App;
