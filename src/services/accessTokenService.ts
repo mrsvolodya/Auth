@@ -1,4 +1,4 @@
-const key = "accessToken";
+const key = "mYaccessToken";
 export const accessTokenService = {
   get: () => localStorage.getItem(key),
   save: (token: string) => localStorage.setItem(key, token),

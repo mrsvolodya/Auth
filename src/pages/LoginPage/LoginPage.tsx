@@ -25,7 +25,7 @@ export const LoginPage = () => {
   const { login, isChecked, currentUser } = useAuth();
 
   if (isChecked && currentUser) {
-    return <Navigate to="/" />;
+    return <Navigate to="/profile" />;
   }
 
   return (

@@ -1,7 +1,7 @@
 import React, { useMemo, useState } from "react";
-import { User } from "../types/users";
-import { authService } from "../services/authService";
 import { accessTokenService } from "../services/accessTokenService";
+import { authService } from "../services/authService";
+import { User } from "../types/users";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // eslint-disable-next-line react-refresh/only-export-components
@@ -13,11 +13,10 @@ export const AuthContext = React.createContext({
   login: async (_email: string, _password: string) => {},
   logout: async () => {},
 });
-/* eslint-enamble @typescript-eslint/no-unused-vars */
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
   const [currentUser, setCurrentUser] = useState<User | null>(null);
-  const [isChecked, setChecked] = useState(true);
+  const [isChecked, setChecked] = useState(false);
 
   async function activate(activationToken: string) {
     const { accessToken, user } = await authService.activate(activationToken);
@@ -31,7 +30,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       accessTokenService.save(accessToken);
       setCurrentUser(user);
     } catch (error) {
-      console.log("User is not authenticated");
+      console.log("User is not authenticated", error);
     } finally {
       setChecked(true);
     }

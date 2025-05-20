@@ -4,11 +4,13 @@ import { Route, Routes, useNavigate } from "react-router-dom";
 import { useAuth } from "./components/AuthContent";
 import { CustomLink } from "./components/CustomLink";
 import { Loader } from "./components/Loader";
+import { ProfileIcon } from "./components/ProfileIcon";
 import { RequireAuth } from "./components/RequireAuth";
 import { usePageError } from "./hooks/usePageError";
 import { AccountActivationPage } from "./pages/AccountActivationPage/AccountActivationPage";
 import { HomePage } from "./pages/HomePage/HomePage";
 import { LoginPage } from "./pages/LoginPage/LoginPage";
+import { ProfilePage } from "./pages/ProfilePage/ProfilePage";
 import { RegistrationPage } from "./pages/RegistrationPage/RegistrationPage";
 import { UsersPage } from "./pages/UsersPage/UsersPage";
 
@@ -44,12 +46,21 @@ function App() {
         </div>
         <div className="flex items-center gap-3 mx-3">
           {currentUser ? (
-            <button
-              className="border-1 border-red-600 outline-none rounded-md p-1 px-2 cursor-pointer bg-red-600"
-              onClick={handleLogout}
-            >
-              Log out
-            </button>
+            <>
+              <CustomLink
+                to="/profile"
+                aria-label="Profile"
+                className="hover:bg-gray-800 rounded-full p-1 transition-colors"
+              >
+                <ProfileIcon />
+              </CustomLink>
+              <button
+                className="border-1 border-red-600 outline-none rounded-md p-1 px-2 cursor-pointer bg-red-600"
+                onClick={handleLogout}
+              >
+                Log out
+              </button>
+            </>
           ) : (
             <>
               <CustomLink to="/sign-up" className="h-7 rounded-xs bg-amber-600">
@@ -73,9 +84,22 @@ function App() {
             />
             <Route path="login" element={<LoginPage />} />
 
-            <Route path="/" element={<RequireAuth />}>
-              <Route path="/users" element={<UsersPage />} />
-            </Route>
+            <Route
+              path="/profile"
+              element={
+                <RequireAuth>
+                  <ProfilePage />
+                </RequireAuth>
+              }
+            />
+            <Route
+              path="/users"
+              element={
+                <RequireAuth>
+                  <UsersPage />
+                </RequireAuth>
+              }
+            />
           </Routes>
         </section>
         {error && <p>{error}</p>}
