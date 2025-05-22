@@ -1,5 +1,6 @@
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
+import { nameFieldSchema } from "../../validation/userSchemas";
 
 interface NameFormValues {
   firstName: string;
@@ -13,8 +14,8 @@ interface NameFormProps {
 }
 
 const nameSchema = Yup.object().shape({
-  firstName: Yup.string().required("First name is required").trim(),
-  lastName: Yup.string().required("Last name is required").trim(),
+  firstName: nameFieldSchema.label("First name"),
+  lastName: nameFieldSchema.label("Last name"),
 });
 
 export function NameForm({

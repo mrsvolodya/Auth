@@ -60,6 +60,19 @@ export function PasswordForm({ onSubmit }: PasswordFormProps) {
               </div>
             )}
           </div>
+          <div className="mb-2">
+            <Field
+              name="confirmPassword"
+              type="password"
+              className="w-full p-2 bg-gray-600 text-white border border-gray-500 rounded"
+              placeholder="Confirm New Password"
+            />
+            {errors.newPassword && touched.newPassword && (
+              <div className="text-red-400 text-sm mt-1">
+                {errors.confirmPassword}
+              </div>
+            )}
+          </div>
           <button
             type="submit"
             className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition-all duration-200"

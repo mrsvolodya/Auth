@@ -5,13 +5,13 @@ import { useAuth } from "../../components/AuthContent";
 import { EmailForm } from "../../components/ProfileComponents/EmailForm";
 import { NameForm } from "../../components/ProfileComponents/NameForm";
 import { PasswordForm } from "../../components/ProfileComponents/PasswordForm";
-
-interface User {
-  email: string;
-  firstName: string;
-  lastName: string;
-  id: string;
-}
+import { userService } from "../../services/userService";
+import {
+  FormValues,
+  NameFormValues,
+  PasswordFormValues,
+} from "../../types/users";
+import { getErrorMessage } from "../../utils/getErrorMessage";
 
 export function ProfilePage() {
   const { currentUser } = useAuth();
@@ -22,42 +22,37 @@ export function ProfilePage() {
     setActiveSection((prev) => (prev === section ? null : section));
   }, []);
 
-  const handleNameSubmit = async (values: {
-    firstName: string;
-    lastName: string;
-  }) => {
+  const handleNameSubmit = async ({ firstName, lastName }: NameFormValues) => {
     try {
-      console.log("Update name:", values);
+      await userService.updateName({ firstName, lastName });
       setMessage("Name updated successfully");
-    } catch {
-      setMessage("Failed to update name");
+    } catch (error) {
+      setMessage(getErrorMessage(error, "Failed to update name"));
     }
   };
 
-  const handlePasswordSubmit = async (values: {
-    oldPassword: string;
-    newPassword: string;
-    confirmPassword: string;
-  }) => {
+  const handlePasswordSubmit = async ({
+    oldPassword,
+    newPassword,
+    confirmPassword,
+  }: PasswordFormValues) => {
     try {
-      if (values.oldPassword !== "currentPassword") {
-        throw new Error("Incorrect old password");
-      }
-      console.log("Updating password");
+      await userService.updatePassword({
+        oldPassword,
+        newPassword,
+        confirmPassword,
+      });
       setMessage("Password updated successfully");
     } catch (error) {
-      setMessage(error.message || "Failed to update password");
+      setMessage(getErrorMessage(error, "Failed to update password"));
     }
   };
 
-  const handleEmailSubmit = async (values: {
-    email: string;
-    password: string;
-  }) => {
+  const handleEmailSubmit = async (values: Partial<FormValues>) => {
     try {
       if (values.password !== "currentPassword") {
         console.log(
-          `Notification sent to ${currentUser.email} about email change to ${values.email}`
+          `Notification sent to ${currentUser?.email} about email change to ${values.email}`
         );
         console.log("Updating email:", values.email);
         setMessage(
@@ -65,7 +60,7 @@ export function ProfilePage() {
         );
       }
     } catch (error) {
-      setMessage(error.message || "Failed to update email");
+      setMessage(getErrorMessage(error, "Failed to update email"));
     }
   };
 
@@ -81,18 +76,18 @@ export function ProfilePage() {
       <div className="bg-gray-800 p-6 rounded-xl shadow-lg">
         <div className="text-lg mb-6 rounded-xl shadow-lg">
           <p className="mb-2">
-            <span className="font-semibold">Email:</span> {currentUser.email}
+            <span className="font-semibold">Email: </span> {currentUser.email}
           </p>
           <p className="mb-2">
-            <span className="font-semibold">First Name:</span>
+            <span className="font-semibold">First Name: </span>
             {currentUser.firstName}
           </p>
           <p className="mb-2">
-            <span className="font-semibold">Last Name:</span>
+            <span className="font-semibold">Last Name: </span>
             {currentUser.lastName}
           </p>
           <p>
-            <span className="font-semibold">ID:</span> {currentUser.id}
+            <span className="font-semibold">ID: </span> {currentUser.id}
           </p>
         </div>
 
