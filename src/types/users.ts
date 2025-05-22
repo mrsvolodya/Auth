@@ -25,3 +25,8 @@ export interface PasswordFormValues {
   newPassword: string;
   confirmPassword: string;
 }
+
+export interface EmailFormValues {
+  newEmail: string;
+  password: string;
+}

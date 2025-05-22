@@ -7,7 +7,7 @@ import { NameForm } from "../../components/ProfileComponents/NameForm";
 import { PasswordForm } from "../../components/ProfileComponents/PasswordForm";
 import { userService } from "../../services/userService";
 import {
-  FormValues,
+  EmailFormValues,
   NameFormValues,
   PasswordFormValues,
 } from "../../types/users";
@@ -48,17 +48,11 @@ export function ProfilePage() {
     }
   };
 
-  const handleEmailSubmit = async (values: Partial<FormValues>) => {
+  const handleEmailSubmit = async ({ newEmail, password }: EmailFormValues) => {
+    console.log("Updating email", newEmail, password);
     try {
-      if (values.password !== "currentPassword") {
-        console.log(
-          `Notification sent to ${currentUser?.email} about email change to ${values.email}`
-        );
-        console.log("Updating email:", values.email);
-        setMessage(
-          "Email updated successfully. Notification sent to old email."
-        );
-      }
+      await userService.updateEmail({ newEmail, password });
+      setMessage("Email updated successfully. Notification sent to old email.");
     } catch (error) {
       setMessage(getErrorMessage(error, "Failed to update email"));
     }

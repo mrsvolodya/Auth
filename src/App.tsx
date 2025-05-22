@@ -8,6 +8,7 @@ import { ProfileIcon } from "./components/ProfileIcon";
 import { RequireAuth } from "./components/RequireAuth";
 import { usePageError } from "./hooks/usePageError";
 import { AccountActivationPage } from "./pages/AccountActivationPage/AccountActivationPage";
+import { EmailChangeConfirmationPage } from "./pages/EmailChangeConfirmationPage/EmailChangeConfirmationPage";
 import { HomePage } from "./pages/HomePage/HomePage";
 import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { ProfilePage } from "./pages/ProfilePage/ProfilePage";
@@ -78,6 +79,7 @@ function App() {
           <Routes>
             <Route path="/" element={<HomePage />} />
             <Route path="sign-up" element={<RegistrationPage />} />
+
             <Route
               path="activation/:activationToken"
               element={<AccountActivationPage />}
@@ -99,6 +101,10 @@ function App() {
                   <UsersPage />
                 </RequireAuth>
               }
+            />
+            <Route
+              path="/users/me/confirm-email-change/:token"
+              element={<EmailChangeConfirmationPage />}
             />
           </Routes>
         </section>

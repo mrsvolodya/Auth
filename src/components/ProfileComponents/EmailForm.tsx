@@ -1,17 +1,13 @@
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-
-interface EmailFormValues {
-  email: string;
-  password: string;
-}
+import { EmailFormValues } from "../../types/users";
 
 interface EmailFormProps {
   onSubmit: (values: EmailFormValues) => void;
 }
 
 const emailSchema = Yup.object().shape({
-  email: Yup.string()
+  newEmail: Yup.string()
     .trim()
     .email("Invalid email format")
     .required("New email is required")
@@ -25,7 +21,7 @@ const emailSchema = Yup.object().shape({
 export function EmailForm({ onSubmit }: EmailFormProps) {
   return (
     <Formik
-      initialValues={{ email: "", password: "" }}
+      initialValues={{ newEmail: "", password: "" }}
       validationSchema={emailSchema}
       onSubmit={onSubmit}
     >
@@ -33,13 +29,13 @@ export function EmailForm({ onSubmit }: EmailFormProps) {
         <Form className="mt-2 p-4 bg-gray-700 rounded-lg">
           <div className="mb-2">
             <Field
-              name="email"
+              name="newEmail"
               type="email"
               className="w-full p-2 bg-gray-600 text-white border border-gray-500 rounded"
               placeholder="New Email"
             />
-            {errors.email && touched.email && (
-              <div className="text-red-400 text-sm mt-1">{errors.email}</div>
+            {errors.newEmail && touched.newEmail && (
+              <div className="text-red-400 text-sm mt-1">{errors.newEmail}</div>
             )}
           </div>
           <div className="mb-2">

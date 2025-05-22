@@ -1,5 +1,10 @@
 import { httpClient } from "../http/httpClient";
-import { NameFormValues, PasswordFormValues, User } from "../types/users";
+import {
+  EmailFormValues,
+  NameFormValues,
+  PasswordFormValues,
+  User,
+} from "../types/users";
 
 export const userService = {
   getAll: (): Promise<User[]> => httpClient.get("/users"),
@@ -14,5 +19,16 @@ export const userService = {
       newPassword,
       confirmPassword,
     });
+  },
+  updateEmail: (values: EmailFormValues): Promise<EmailFormValues> => {
+    const { newEmail, password } = values;
+
+    return httpClient.patch("/users/me/email", { newEmail, password });
+  },
+
+  confirmEmailChange: (
+    token: string
+  ): Promise<{ user: User; accessToken: string }> => {
+    return httpClient.get(`/users/me/confirm-email-change/${token}`);
   },
 };
