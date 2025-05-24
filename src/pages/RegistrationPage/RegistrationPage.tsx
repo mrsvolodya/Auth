@@ -6,57 +6,32 @@ import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "../../components/AuthContent";
 import { usePageError } from "../../hooks/usePageError";
 import { authService } from "../../services/authService";
+import { registrationSchema } from "../../validation/userSchemas";
 
 type RegistrationError = AxiosError<{
-  errors?: { email?: string; password?: string };
+  errors?: {
+    email?: string;
+    password?: string;
+    firstName?: string;
+    lastName?: string;
+    confirmPassword?: string;
+  };
   message: string;
 }>;
 
 // First, let's define a type for our form values
 type RegistrationFormValues = {
-  email: string;
-  password: string;
   firstName: string;
   lastName: string;
+  email: string;
+  password: string;
   confirmPassword: string;
-};
-
-const validateForm = (values: RegistrationFormValues) => {
-  const errors: Partial<RegistrationFormValues> = {};
-
-  // Email validation
-  if (!values.email) {
-    errors.email = "Email is required";
-  } else if (!/^[\w.+-]+@([\w-]+\.){1,3}[\w-]{2,}$/.test(values.email)) {
-    errors.email = "Email is not valid";
-  }
-
-  // Password validation
-  if (!values.password) {
-    errors.password = "Password is required";
-  } else if (values.password.length < 6) {
-    errors.password = "At least 6 characters";
-  }
-
-  // Confirm password validation
-  if (!values.confirmPassword) {
-    errors.confirmPassword = "Confirm password is required";
-  } else if (values.password !== values.confirmPassword) {
-    errors.confirmPassword = "Passwords must match";
-  }
-
-  if (!values.firstName) {
-    errors.firstName = "Type your name";
-  }
-
-  if (!values.lastName) {
-    errors.lastName = "Type your surname";
-  }
 };
 
 export const RegistrationPage = () => {
   const [error, setError] = usePageError("");
   const [registered, setRegistered] = useState(false);
+  const [showPassword, setShowPassword] = useState(false);
 
   const { isChecked, currentUser } = useAuth();
 
@@ -77,13 +52,13 @@ export const RegistrationPage = () => {
     <>
       <Formik<RegistrationFormValues>
         initialValues={{
+          firstName: "",
+          lastName: "",
           email: "",
           password: "",
           confirmPassword: "",
-          firstName: "",
-          lastName: "",
         }}
-        validate={validateForm}
+        validationSchema={registrationSchema}
         validateOnMount={true}
         onSubmit={({ firstName, lastName, email, password }, formikHelpers) => {
           formikHelpers.setSubmitting(true);
@@ -96,6 +71,12 @@ export const RegistrationPage = () => {
               const { errors, message } = error.response.data;
               formikHelpers.setFieldError("email", errors?.email);
               formikHelpers.setFieldError("password", errors?.password);
+              formikHelpers.setFieldError("firstName", errors?.firstName);
+              formikHelpers.setFieldError("lastName", errors?.lastName);
+              formikHelpers.setFieldError(
+                "confirmPassword",
+                errors?.confirmPassword
+              );
               if (message) setError(message);
             })
             .finally(() => formikHelpers.setSubmitting(false));
@@ -105,7 +86,6 @@ export const RegistrationPage = () => {
           <Form className="w-full max-w-sm mx-auto my-10 p-8 bg-white shadow-xl rounded-xl text-black">
             <h1 className="text-3xl font-semibold text-center mb-6">Sign up</h1>
             {/* First Name Field} */}
-
             <div className="flex justify-between space-x-1.5">
               <div className="mb-3">
                 <label
@@ -123,7 +103,9 @@ export const RegistrationPage = () => {
                     "w-full p-2 border  rounded-lg shadow-sm focus:ring focus:ring-blue-300",
                     {
                       "border-red-500": touched.firstName && errors.firstName,
-                      "border-gray-300": !(touched.email && errors.firstName),
+                      "border-gray-300": !(
+                        touched.firstName && errors.firstName
+                      ),
                     }
                   )}
                 />
@@ -150,7 +132,6 @@ export const RegistrationPage = () => {
                 />
               </div>
             </div>
-
             {/* Email Field */}
             <div className="mb-3">
               <label
@@ -182,7 +163,6 @@ export const RegistrationPage = () => {
                 <p className="mt-2 text-sm text-red-500">{errors.email}</p>
               )}
             </div>
-
             {/* Password Field */}
             <div className="mb-3">
               <label
@@ -191,12 +171,12 @@ export const RegistrationPage = () => {
               >
                 Password
               </label>
-              <div className="relative mt-1">
+              <div className="relative mt-1 flex-column">
                 <Field
                   name="password"
-                  type="password"
+                  type={showPassword ? "text" : "password"}
                   id="password"
-                  placeholder="*******"
+                  placeholder="Enter your password"
                   className={clsx(
                     "w-full p-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300",
                     {
@@ -205,6 +185,38 @@ export const RegistrationPage = () => {
                     }
                   )}
                 />
+                <div className="flex justify-end items-center gap-3">
+                  <label
+                    htmlFor="showPassword"
+                    className="flex-row-reverse text-gray-700 text-sm"
+                  >
+                    show password
+                  </label>
+                  <input
+                    type="checkbox"
+                    id="showPassword"
+                    onClick={() => setShowPassword(!showPassword)}
+                    className="relative peer shrink-0
+    appearance-none w-4 h-4 border-2 border-blue-500 rounded-sm bg-white
+    mt-1
+    checked:bg-blue-800 checked:border-0"
+                  />
+                  <svg
+                    className="
+      absolute 
+      w-4 h-4 mt-1
+      hidden peer-checked:block"
+                    xmlns="http://www.w3.org/2000/svg"
+                    viewBox="0 0 24 24"
+                    fill="none"
+                    stroke="currentColor"
+                    stroke-width="4"
+                    stroke-linecap="round"
+                    stroke-linejoin="round"
+                  >
+                    <polyline points="20 6 9 17 4 12"></polyline>
+                  </svg>
+                </div>
                 <span className="absolute left-3 top-3 text-gray-400">
                   <i className="fa fa-lock"></i>
                 </span>
@@ -221,7 +233,6 @@ export const RegistrationPage = () => {
                 )
               )}
             </div>
-
             <div className="mb-3">
               <label
                 htmlFor="confirmPassword"
@@ -235,7 +246,7 @@ export const RegistrationPage = () => {
                   type="password"
                   name="confirmPassword"
                   id="confirmPassword"
-                  placeholder="*******"
+                  placeholder="Enter password again"
                   className={clsx(
                     "w-full p-2 border rounded-lg shadow-sm focus:ring focus:ring-blue-300",
                     {
@@ -257,35 +268,25 @@ export const RegistrationPage = () => {
                 </p>
               )}
             </div>
-
             {/* Submit Button */}
             <div className="mb-4">
               <button
                 type="submit"
+                disabled={isSubmitting || Object.keys(errors).length > 0}
                 className={clsx(
-                  "w-full bg-green-500 text-white py-2 rounded-lg font-semibold transition-all duration-200",
+                  "w-full text-white py-2 rounded-lg font-semibold transition-all duration-200",
                   {
-                    "opacity-50 cursor-not-allowed":
-                      isSubmitting || errors.email || errors.password,
-                    "hover:bg-green-600": !(
-                      isSubmitting ||
-                      errors.email ||
-                      errors.password
+                    "bg-gray-400 opacity-60 cursor-not-allowed":
+                      isSubmitting || Object.keys(errors).length > 0,
+                    "bg-green-500 hover:bg-green-600": !(
+                      isSubmitting || Object.keys(errors).length > 0
                     ),
                   }
                 )}
-                disabled={
-                  isSubmitting ||
-                  !!errors.email ||
-                  !!errors.password ||
-                  !!errors.firstName ||
-                  !!errors.lastName
-                }
               >
                 {isSubmitting ? "Signing up..." : "Sign up"}
               </button>
             </div>
-
             {/* Login Link */}
             <p className="mt-4 text-center text-sm text-gray-600">
               Already have an account?{" "}
