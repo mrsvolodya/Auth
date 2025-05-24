@@ -8,6 +8,7 @@ import { PasswordForm } from "../../components/ProfileComponents/PasswordForm";
 import { userService } from "../../services/userService";
 import {
   EmailFormValues,
+  Loader,
   NameFormValues,
   PasswordFormValues,
 } from "../../types/users";
@@ -16,6 +17,11 @@ import { getErrorMessage } from "../../utils/getErrorMessage";
 export function ProfilePage() {
   const { currentUser } = useAuth();
   const [activeSection, setActiveSection] = useState<string | null>(null);
+  const [loader, setLoader] = useState<Loader>({
+    fullName: false,
+    password: false,
+    email: false,
+  });
   const [message, setMessage] = useState<string>("");
 
   const toggleSection = useCallback((section: string) => {
@@ -24,37 +30,63 @@ export function ProfilePage() {
 
   const handleNameSubmit = async ({ firstName, lastName }: NameFormValues) => {
     try {
+      setLoader((prev) => ({
+        ...prev,
+        fullName: true,
+      }));
+
       await userService.updateName({ firstName, lastName });
       setMessage("Name updated successfully");
     } catch (error) {
       setMessage(getErrorMessage(error, "Failed to update name"));
+    } finally {
+      setLoader((prev) => ({
+        ...prev,
+        fullName: false,
+      }));
     }
   };
 
   const handlePasswordSubmit = async ({
     oldPassword,
     newPassword,
-    confirmPassword,
   }: PasswordFormValues) => {
     try {
+      setLoader((prev) => ({
+        ...prev,
+        password: true,
+      }));
       await userService.updatePassword({
         oldPassword,
         newPassword,
-        confirmPassword,
       });
       setMessage("Password updated successfully");
     } catch (error) {
+      console.log(error);
       setMessage(getErrorMessage(error, "Failed to update password"));
+    } finally {
+      setLoader((prev) => ({
+        ...prev,
+        password: false,
+      }));
     }
   };
 
   const handleEmailSubmit = async ({ newEmail, password }: EmailFormValues) => {
-    console.log("Updating email", newEmail, password);
     try {
+      setLoader((prev) => ({
+        ...prev,
+        email: true,
+      }));
       await userService.updateEmail({ newEmail, password });
       setMessage("Email updated successfully. Notification sent to old email.");
     } catch (error) {
       setMessage(getErrorMessage(error, "Failed to update email"));
+    } finally {
+      setLoader((prev) => ({
+        ...prev,
+        email: false,
+      }));
     }
   };
 
@@ -99,6 +131,7 @@ export function ProfilePage() {
               initialFirstName={currentUser.firstName}
               initialLastName={currentUser.lastName}
               onSubmit={handleNameSubmit}
+              loader={loader}
             />
           )}
         </div>
@@ -111,7 +144,7 @@ export function ProfilePage() {
             Change Password {activeSection === "password" ? "▲" : "▼"}
           </button>
           {activeSection === "password" && (
-            <PasswordForm onSubmit={handlePasswordSubmit} />
+            <PasswordForm onSubmit={handlePasswordSubmit} loader={loader} />
           )}
         </div>
         <div className="mb-4">
@@ -123,7 +156,7 @@ export function ProfilePage() {
             Change Email {activeSection === "email" ? "▲" : "▼"}
           </button>
           {activeSection === "email" && (
-            <EmailForm onSubmit={handleEmailSubmit} />
+            <EmailForm onSubmit={handleEmailSubmit} loader={loader} />
           )}
         </div>
         {message && (

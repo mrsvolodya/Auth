@@ -13,11 +13,10 @@ export const userService = {
     return httpClient.patch("/users/me", { firstName, lastName });
   },
   updatePassword: (values: PasswordFormValues): Promise<PasswordFormValues> => {
-    const { oldPassword, newPassword, confirmPassword } = values;
+    const { oldPassword, newPassword } = values;
     return httpClient.patch("/users/me/password", {
       oldPassword,
       newPassword,
-      confirmPassword,
     });
   },
   updateEmail: (values: EmailFormValues): Promise<EmailFormValues> => {

@@ -1,9 +1,11 @@
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
-import { EmailFormValues } from "../../types/users";
+import { EmailFormValues, Loader } from "../../types/users";
+import { SubmitBtn } from "../../ui/SubmitBtn";
 
 interface EmailFormProps {
   onSubmit: (values: EmailFormValues) => void;
+  loader: Loader;
 }
 
 const emailSchema = Yup.object().shape({
@@ -18,7 +20,7 @@ const emailSchema = Yup.object().shape({
   password: Yup.string().required("Current password is required"),
 });
 
-export function EmailForm({ onSubmit }: EmailFormProps) {
+export function EmailForm({ onSubmit, loader }: EmailFormProps) {
   return (
     <Formik
       initialValues={{ newEmail: "", password: "" }}
@@ -49,12 +51,11 @@ export function EmailForm({ onSubmit }: EmailFormProps) {
               <div className="text-red-400 text-sm mt-1">{errors.password}</div>
             )}
           </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition-all duration-200"
-          >
-            Update Email
-          </button>
+          <SubmitBtn
+            loader={loader.email}
+            label="Update Email"
+            isProcess="Updating email..."
+          />
         </Form>
       )}
     </Formik>

@@ -3,8 +3,8 @@ import * as Yup from "yup";
 export const nameFieldSchema = Yup.string()
   .required("This field is required")
   .trim()
-  .matches(/^[^\d]*$/, "Must not contain numbers");
-
+  .matches(/^[^\d]*$/, "Must not contain numbers")
+  .min(2, "Must be at least 2 letters long");
 
 export const registrationSchema = Yup.object({
   firstName: nameFieldSchema,

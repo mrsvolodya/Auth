@@ -23,10 +23,15 @@ export interface NameFormValues {
 export interface PasswordFormValues {
   oldPassword: string;
   newPassword: string;
-  confirmPassword: string;
 }
 
 export interface EmailFormValues {
   newEmail: string;
   password: string;
 }
+
+export type Loader = Record<"fullName" | "password" | "email", boolean>;
+export type ErrorsMessage = Record<
+  "nameError" | "passwordError" | "emeilError",
+  string
+>;

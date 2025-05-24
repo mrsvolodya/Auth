@@ -1,5 +1,7 @@
 import { Field, Form, Formik } from "formik";
 import * as Yup from "yup";
+import { Loader } from "../../types/users";
+import { SubmitBtn } from "../../ui/SubmitBtn";
 import { nameFieldSchema } from "../../validation/userSchemas";
 
 interface NameFormValues {
@@ -11,6 +13,7 @@ interface NameFormProps {
   initialFirstName: string;
   initialLastName: string;
   onSubmit: (values: NameFormValues) => void;
+  loader: Loader;
 }
 
 const nameSchema = Yup.object().shape({
@@ -22,6 +25,7 @@ export function NameForm({
   initialFirstName,
   initialLastName,
   onSubmit,
+  loader,
 }: NameFormProps) {
   return (
     <Formik
@@ -55,12 +59,11 @@ export function NameForm({
               <div className="text-red-400 text-sm mt-1">{errors.lastName}</div>
             )}
           </div>
-          <button
-            type="submit"
-            className="w-full bg-blue-600 text-white p-2 rounded hover:bg-blue-700 transition-all duration-200"
-          >
-            Update Name
-          </button>
+          <SubmitBtn
+            loader={loader.fullName}
+            label="Update Name"
+            isProcess="Updating name..."
+          />
         </Form>
       )}
     </Formik>
