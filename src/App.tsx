@@ -13,6 +13,8 @@ import { HomePage } from "./pages/HomePage/HomePage";
 import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { ProfilePage } from "./pages/ProfilePage/ProfilePage";
 import { RegistrationPage } from "./pages/RegistrationPage/RegistrationPage";
+import { ResetPasswordConfirmPage } from "./pages/ResetPasswordPage/ResetPasswordConfirmPage";
+import { ResetPasswordPage } from "./pages/ResetPasswordPage/ResetPasswordPage";
 import { UsersPage } from "./pages/UsersPage/UsersPage";
 
 function App() {
@@ -85,6 +87,11 @@ function App() {
               element={<AccountActivationPage />}
             />
             <Route path="login" element={<LoginPage />} />
+            <Route path="reset-password" element={<ResetPasswordPage />} />
+            <Route
+              path="reset-password/:token"
+              element={<ResetPasswordConfirmPage />}
+            />
 
             <Route
               path="/profile"

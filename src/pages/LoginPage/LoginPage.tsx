@@ -151,6 +151,17 @@ export const LoginPage = () => {
                   Sign up
                 </Link>
               </p>
+
+              {/* Forgot Password Link */}
+              <p className="mt-2 text-center text-sm text-gray-600">
+                Forgot your password?{" "}
+                <Link
+                  to="/reset-password"
+                  className="text-blue-600 hover:underline"
+                >
+                  Reset password
+                </Link>
+              </p>
             </Form>
           )}
         </Formik>

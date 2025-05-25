@@ -32,4 +32,13 @@ export const authService = {
   logout: () => client.post("/logout"),
 
   refresh: (): Promise<AuthData> => client.get("/refresh"),
+
+  // Password reset methods
+  requestPasswordReset: (email: string) => {
+    return client.post("/reset-password", { email });
+  },
+
+  confirmPasswordReset: (token: string, password: string) => {
+    return client.post(`/reset-password/${token}`, { password });
+  },
 };
