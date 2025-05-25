@@ -3,6 +3,7 @@ import clsx from "clsx";
 import { Field, Form, Formik } from "formik";
 import { Link, Navigate, useLocation, useNavigate } from "react-router-dom";
 import { useAuth } from "../../components/AuthContent";
+import { GoogleAuth } from "../../components/GoogleAuth";
 import { usePageError } from "../../hooks/usePageError";
 
 const EMAIL_PATTERN = /^[\w.+-]+@([\w-]+\.){1,3}[\w-]{2,}$/;
@@ -142,6 +143,25 @@ export const LoginPage = () => {
                 >
                   {isSubmitting ? "Logging in..." : "Log in"}
                 </button>
+              </div>
+
+              {/* Google Sign In */}
+              <div className="relative my-4">
+                <div className="absolute inset-0 flex items-center">
+                  <div className="w-full border-t border-gray-300"></div>
+                </div>
+                <div className="relative flex justify-center text-sm">
+                  <span className="px-2 bg-white text-gray-500">
+                    Or Log in with Google
+                  </span>
+                </div>
+              </div>
+              <div className="mb-4">
+                <GoogleAuth
+                  mode="signin"
+                  redirectPath={"/profile"}
+                  onError={setError}
+                />
               </div>
 
               {/* Signup Link */}

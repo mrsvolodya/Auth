@@ -255,11 +255,14 @@ export const RegistrationPage = () => {
                     </span>
                   </div>
                 </div>
-                <GoogleAuth
-                  mode="standard"
-                  onSuccess={handleGoogleSuccess}
-                  onError={handleGoogleError}
-                />
+                <div className="mb-4">
+                  <GoogleAuth
+                    mode="signup"
+                    redirectPath={"/profile"}
+                    onSuccess={handleGoogleSuccess}
+                    onError={handleGoogleError}
+                  />
+                </div>
               </div>
               {/* Submit Button */}
               <div className="mb-4">

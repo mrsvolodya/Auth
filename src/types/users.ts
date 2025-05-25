@@ -38,9 +38,10 @@ export type ErrorsMessage = Record<
   string
 >;
 
+export type AuthMode = "signin" | "signup";
 export interface GoogleAuthProps {
-  mode: "button" | "icon" | "standard";
-  text?: string;
+  mode?: "icon" | "standard";
+  authMode?: AuthMode;
   onSuccess?: () => void;
   onError?: (error: string) => void;
 }
