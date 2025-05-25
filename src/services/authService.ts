@@ -43,6 +43,6 @@ export const authService = {
   },
 
   googleSignIn: (credential: string): Promise<AuthData> => {
-    return client.post("/auth/google", { credential });
+    return client.post("/google", { credential });
   },
 };
