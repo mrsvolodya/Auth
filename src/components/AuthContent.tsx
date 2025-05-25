@@ -1,17 +1,19 @@
 import React, { useMemo, useState } from "react";
 import { accessTokenService } from "../services/accessTokenService";
 import { authService } from "../services/authService";
-import { User } from "../types/users";
+import { AuthContextType, User } from "../types/users";
 
 /* eslint-disable @typescript-eslint/no-unused-vars */
 // eslint-disable-next-line react-refresh/only-export-components
-export const AuthContext = React.createContext({
+export const AuthContext = React.createContext<AuthContextType>({
   isChecked: false,
   currentUser: null as User | null,
   checkAuth: async () => {},
   activate: async (_token: string) => {},
   login: async (_email: string, _password: string) => {},
   logout: async () => {},
+  // updateUser: () => {},
+  googleSignIn: async () => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -43,6 +45,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setCurrentUser(user);
   }
 
+  async function googleSignIn(credential: string) {
+    try {
+      const { accessToken, user } = await authService.googleSignIn(credential);
+      accessTokenService.save(accessToken);
+      setCurrentUser(user);
+    } catch (error) {
+      console.error("Google sign in failed:", error);
+      throw error;
+    }
+  }
+
   async function logout() {
     await authService.logout();
 
@@ -58,6 +71,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       activate,
       login,
       logout,
+      // updateUser,
+      googleSignIn,
     }),
     [currentUser, isChecked]
   );

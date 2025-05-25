@@ -41,4 +41,8 @@ export const authService = {
   confirmPasswordReset: (token: string, password: string) => {
     return client.post(`/reset-password/${token}`, { password });
   },
+
+  googleSignIn: (credential: string): Promise<AuthData> => {
+    return client.post("/auth/google", { credential });
+  },
 };

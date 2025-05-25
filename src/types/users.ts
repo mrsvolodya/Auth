@@ -1,3 +1,5 @@
+import { AxiosError } from "axios";
+
 export interface User {
   id: number;
   email: string;
@@ -35,3 +37,41 @@ export type ErrorsMessage = Record<
   "nameError" | "passwordError" | "emeilError",
   string
 >;
+
+export interface GoogleAuthProps {
+  mode: "button" | "icon" | "standard";
+  text?: string;
+  onSuccess?: () => void;
+  onError?: (error: string) => void;
+}
+
+export interface AuthContextType {
+  isChecked: boolean;
+  currentUser: User | null;
+  checkAuth: () => Promise<void>;
+  activate: (token: string) => Promise<void>;
+  login: (email: string, password: string) => Promise<void>;
+  logout: () => Promise<void>;
+  // updateUser: (userData: Partial<User>) => void;
+  googleSignIn: (token: string) => Promise<void>;
+}
+
+export type RegistrationError = AxiosError<{
+  errors?: {
+    email?: string;
+    password?: string;
+    firstName?: string;
+    lastName?: string;
+    confirmPassword?: string;
+  };
+  message: string;
+}>;
+
+// First, let's define a type for our form values
+export type RegistrationFormValues = {
+  firstName: string;
+  lastName: string;
+  email: string;
+  password: string;
+  confirmPassword: string;
+};

@@ -1,40 +1,31 @@
-import { AxiosError } from "axios";
-import clsx from "clsx"; // Імпорт clsx
+import clsx from "clsx";
 import { Field, Form, Formik } from "formik";
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "../../components/AuthContent";
+import { GoogleAuth } from "../../components/GoogleAuth";
 import { usePageError } from "../../hooks/usePageError";
 import { authService } from "../../services/authService";
+import { RegistrationError, RegistrationFormValues } from "../../types/users";
 import { CustomCheckbox } from "../../ui/CustomCheckbox";
+import { SubmitBtn } from "../../ui/SubmitBtn";
 import { registrationSchema } from "../../validation/userSchemas";
-
-type RegistrationError = AxiosError<{
-  errors?: {
-    email?: string;
-    password?: string;
-    firstName?: string;
-    lastName?: string;
-    confirmPassword?: string;
-  };
-  message: string;
-}>;
-
-// First, let's define a type for our form values
-type RegistrationFormValues = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  confirmPassword: string;
-};
 
 export const RegistrationPage = () => {
   const [error, setError] = usePageError("");
+  // const navigate = useNavigate();
   const [registered, setRegistered] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
 
   const { isChecked, currentUser } = useAuth();
+
+  const handleGoogleSuccess = () => {
+    setRegistered(true);
+  };
+
+  const handleGoogleError = (error: string) => {
+    setError(error);
+  };
 
   if (isChecked && currentUser) {
     return <Navigate to="/" />;
@@ -251,24 +242,32 @@ export const RegistrationPage = () => {
                   </p>
                 )}
               </div>
+
+              {/* Add Google Auth button at the top */}
+              <div className="mb-6">
+                <div className="relative my-4">
+                  <div className="absolute inset-0 flex items-center">
+                    <div className="w-full border-t border-gray-300"></div>
+                  </div>
+                  <div className="relative flex justify-center text-sm">
+                    <span className="px-2 bg-white text-gray-500">
+                      Or sign up with Google
+                    </span>
+                  </div>
+                </div>
+                <GoogleAuth
+                  mode="standard"
+                  onSuccess={handleGoogleSuccess}
+                  onError={handleGoogleError}
+                />
+              </div>
               {/* Submit Button */}
               <div className="mb-4">
-                <button
-                  type="submit"
-                  disabled={isSubmitting || Object.keys(errors).length > 0}
-                  className={clsx(
-                    "w-full text-white py-2 rounded-lg font-semibold transition-all duration-200",
-                    {
-                      "bg-gray-400 opacity-60 cursor-not-allowed":
-                        isSubmitting || Object.keys(errors).length > 0,
-                      "bg-green-500 hover:bg-green-600": !(
-                        isSubmitting || Object.keys(errors).length > 0
-                      ),
-                    }
-                  )}
-                >
-                  {isSubmitting ? "Signing up..." : "Sign up"}
-                </button>
+                <SubmitBtn
+                  loader={isSubmitting}
+                  label="Sign up"
+                  isProcess="Signing up..."
+                />
               </div>
               {/* Login Link */}
               <p className="mt-4 text-center text-sm text-gray-600">
