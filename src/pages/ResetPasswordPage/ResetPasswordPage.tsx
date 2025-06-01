@@ -63,7 +63,6 @@ export const ResetPasswordPage = () => {
             setError("");
             setSubmitting(true);
 
-            // Call the reset password API
             authService
               .requestPasswordReset(email)
               .then(() => {

@@ -21,7 +21,7 @@ export const GoogleAuth = ({
   });
 
   return (
-    <div className="google-auth-container">
+    <div className="google-auth-container mb-2">
       <GoogleLogin
         onSuccess={handleGoogleSuccess}
         onError={() => handleGoogleError?.("Google authentication failed")}

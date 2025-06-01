@@ -1,6 +1,6 @@
 import axios, { AxiosError } from "axios";
-import { authService } from "../services/authService";
 import { accessTokenService } from "../services/accessTokenService";
+import { authService } from "../services/authService";
 
 export const httpClient = axios.create({
   baseURL: import.meta.env.VITE_API_URL as string,

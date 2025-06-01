@@ -53,7 +53,7 @@ export interface AuthContextType {
   activate: (token: string) => Promise<void>;
   login: (email: string, password: string) => Promise<void>;
   logout: () => Promise<void>;
-  // updateUser: (userData: Partial<User>) => void;
+  gitHubSignIn: (_code: string) => Promise<void>;
   googleSignIn: (token: string) => Promise<void>;
 }
 

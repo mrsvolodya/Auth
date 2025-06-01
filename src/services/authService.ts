@@ -33,7 +33,6 @@ export const authService = {
 
   refresh: (): Promise<AuthData> => client.get("/refresh"),
 
-  // Password reset methods
   requestPasswordReset: (email: string) => {
     return client.post("/reset-password", { email });
   },
@@ -44,5 +43,9 @@ export const authService = {
 
   googleSignIn: (credential: string): Promise<AuthData> => {
     return client.post("/google", { credential });
+  },
+
+  gitHubSingIn: (code: string): Promise<AuthData> => {
+    return client.post("/auth/github/callback", { code });
   },
 };

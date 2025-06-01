@@ -12,8 +12,8 @@ export const AuthContext = React.createContext<AuthContextType>({
   activate: async (_token: string) => {},
   login: async (_email: string, _password: string) => {},
   logout: async () => {},
-  // updateUser: () => {},
   googleSignIn: async () => {},
+  gitHubSignIn: async (_code: string) => {},
 });
 
 export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
@@ -32,7 +32,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       accessTokenService.save(accessToken);
       setCurrentUser(user);
     } catch (error) {
-      console.log("User is not authenticated", error);
+      console.error("User is not authenticated", error);
     } finally {
       setChecked(true);
     }
@@ -51,7 +51,7 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       accessTokenService.save(accessToken);
       setCurrentUser(user);
     } catch (error) {
-      console.error("Google sign in failed:", error);
+      console.error("Google sign in error:", error);
       throw error;
     }
   }
@@ -63,6 +63,17 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
     setCurrentUser(null);
   }
 
+  async function gitHubSignIn(code: string) {
+    try {
+      const { accessToken, user } = await authService.gitHubSingIn(code);
+      accessTokenService.save(accessToken);
+      setCurrentUser(user);
+    } catch (error) {
+      console.error("Git Hub sign in error:", error);
+      throw error;
+    }
+  }
+
   const value = useMemo(
     () => ({
       isChecked,
@@ -71,8 +82,8 @@ export const AuthProvider = ({ children }: { children: React.ReactNode }) => {
       activate,
       login,
       logout,
-      // updateUser,
       googleSignIn,
+      gitHubSignIn,
     }),
     [currentUser, isChecked]
   );

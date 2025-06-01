@@ -3,7 +3,8 @@ import { Field, Form, Formik } from "formik";
 import { useState } from "react";
 import { Link, Navigate } from "react-router-dom";
 import { useAuth } from "../../components/AuthContent";
-import { GoogleAuth } from "../../components/GoogleAuth";
+import { GitHubLoginButton } from "../../components/ProfileComponents/SocialAuth/GitHub/GitHubLoginButton";
+import { GoogleAuthBtn } from "../../components/ProfileComponents/SocialAuth/GoggleAuthBtn";
 import { usePageError } from "../../hooks/usePageError";
 import { authService } from "../../services/authService";
 import { RegistrationError, RegistrationFormValues } from "../../types/users";
@@ -13,10 +14,8 @@ import { registrationSchema } from "../../validation/userSchemas";
 
 export const RegistrationPage = () => {
   const [error, setError] = usePageError("");
-  // const navigate = useNavigate();
   const [registered, setRegistered] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
-
   const { isChecked, currentUser } = useAuth();
 
   const handleGoogleSuccess = () => {
@@ -28,7 +27,7 @@ export const RegistrationPage = () => {
   };
 
   if (isChecked && currentUser) {
-    return <Navigate to="/" />;
+    return <Navigate to="/profile" />;
   }
 
   if (registered) {
@@ -80,8 +79,8 @@ export const RegistrationPage = () => {
               <h1 className="text-3xl font-semibold text-center mb-6">
                 Sign up
               </h1>
-              {/* First Name Field} */}
               <div className="flex justify-between space-x-1.5">
+                {/* First Name Field} */}
                 <div className="mb-3">
                   <label
                     htmlFor="firstName"
@@ -111,6 +110,7 @@ export const RegistrationPage = () => {
                   )}
                 </div>
                 <div className="mb-3">
+                  {/* Last Name Field} */}
                   <label
                     htmlFor="lastName"
                     className="block text-sm font-medium text-gray-700"
@@ -139,8 +139,9 @@ export const RegistrationPage = () => {
                   )}
                 </div>
               </div>
-              {/* Email Field */}
+
               <div className="mb-3">
+                {/* Email Field */}
                 <label
                   htmlFor="email"
                   className="block text-sm font-medium text-gray-700"
@@ -170,8 +171,9 @@ export const RegistrationPage = () => {
                   <p className="mt-2 text-sm text-red-500">{errors.email}</p>
                 )}
               </div>
-              {/* Password Field */}
               <div className="mb-3">
+                {/* Password Field */}
+
                 <label
                   htmlFor="password"
                   className="block text-sm font-medium text-gray-700"
@@ -208,6 +210,8 @@ export const RegistrationPage = () => {
                 )}
               </div>
               <div className="mb-3">
+                {/* Confirm Password Field */}
+
                 <label
                   htmlFor="confirmPassword"
                   className="block text-sm font-medium text-gray-700"
@@ -243,27 +247,15 @@ export const RegistrationPage = () => {
                 )}
               </div>
 
-              {/* Add Google Auth button at the top */}
-              <div className="mb-6">
-                <div className="relative my-4">
-                  <div className="absolute inset-0 flex items-center">
-                    <div className="w-full border-t border-gray-300"></div>
-                  </div>
-                  <div className="relative flex justify-center text-sm">
-                    <span className="px-2 bg-white text-gray-500">
-                      Or sign up with Google
-                    </span>
-                  </div>
-                </div>
-                <div className="mb-4">
-                  <GoogleAuth
-                    mode="signup"
-                    redirectPath={"/profile"}
-                    onSuccess={handleGoogleSuccess}
-                    onError={handleGoogleError}
-                  />
-                </div>
-              </div>
+              {/* Add Google Auth button */}
+              <GoogleAuthBtn
+                onSuccess={handleGoogleSuccess}
+                onError={handleGoogleError}
+              />
+
+              {/* Add GitHub  button */}
+
+              <GitHubLoginButton />
               {/* Submit Button */}
               <div className="mb-4">
                 <SubmitBtn

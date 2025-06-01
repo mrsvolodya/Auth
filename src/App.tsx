@@ -9,6 +9,7 @@ import { RequireAuth } from "./components/RequireAuth";
 import { usePageError } from "./hooks/usePageError";
 import { AccountActivationPage } from "./pages/AccountActivationPage/AccountActivationPage";
 import { EmailChangeConfirmationPage } from "./pages/EmailChangeConfirmationPage/EmailChangeConfirmationPage";
+import { GitHubAuthCallbackPage } from "./pages/GitHubAuthCallbackPage/GitHubAuthCallbackPage";
 import { HomePage } from "./pages/HomePage/HomePage";
 import { LoginPage } from "./pages/LoginPage/LoginPage";
 import { ProfilePage } from "./pages/ProfilePage/ProfilePage";
@@ -112,6 +113,11 @@ function App() {
             <Route
               path="/users/me/confirm-email-change/:token"
               element={<EmailChangeConfirmationPage />}
+            />
+
+            <Route
+              path="/auth/github/callback"
+              element={<GitHubAuthCallbackPage />}
             />
           </Routes>
         </section>
